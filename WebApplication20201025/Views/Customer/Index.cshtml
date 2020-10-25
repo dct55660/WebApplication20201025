@@ -1,0 +1,35 @@
+﻿@model IEnumerable<WebApplication20201025.Models.Customer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div>
+    <h4>客戶系統</h4>
+    <hr />
+    <table>
+        <tr>
+            <th>
+                顧客ID
+            </th>
+            <th></th>
+        </tr>
+        @{ 
+            foreach(var item in Model)
+            {                
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerID)                        
+                    </td>
+                    <td>
+                        @Html.ActionLink("修改", "Edit", new { ID = item.CustomerID }) |
+                        @Html.ActionLink("刪除", "Delete", "Product", new { ID = item.CustomerID },
+                                         new { Onclick = "return confirm('確定要刪除嗎?')" })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

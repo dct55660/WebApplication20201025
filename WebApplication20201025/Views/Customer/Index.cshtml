@@ -4,32 +4,147 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>客戶系統</h2>
+
+<p>
+    @Html.ActionLink("新增客戶", "Create")
+</p>
 
 <div>
-    <h4>客戶系統</h4>
-    <hr />
-    <table>
-        <tr>
-            <th>
-                顧客ID
-            </th>
-            <th></th>
-        </tr>
-        @{ 
-            foreach(var item in Model)
-            {                
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CustomerID)                        
-                    </td>
-                    <td>
-                        @Html.ActionLink("修改", "Edit", new { ID = item.CustomerID }) |
-                        @Html.ActionLink("刪除", "Delete", "Product", new { ID = item.CustomerID },
-                                         new { Onclick = "return confirm('確定要刪除嗎?')" })
-                    </td>
-                </tr>
+    <div id="tableDiv">
+        <table class="table" id="Cus_table">
+            <tr>
+                <th scope="col">
+                    編號
+                </th>
+                <th scope="col">
+                    顧客ID
+                </th>
+                <th scope="col">
+                    公司名稱
+                </th>
+                <th scope="col">
+                    聯繫人
+                </th>
+                <th scope="col">
+                    聯繫人職位
+                </th>
+                <th scope="col">
+                    地址
+                </th>
+                <th scope="col">
+                    電話
+                </th>
+                <th scope="col">
+                    修改資訊
+                </th>
+            </tr>
+            @{
+                var i = 1;
+                foreach (var item in Model)
+                {
+                    var address = item.City;
+                    address += " " + item.Address;
+                    var ID = item.CustomerID;
+
+                    <tr>
+                        <th scope="row">
+                            @i
+                        </th>
+                        <td>
+                            @ID
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompanyName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ContactName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ContactTitle)
+                        </td>
+                        <td>
+                            @address
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.ActionLink("修改", "Edit", new { ID = ID }) |
+                            <a name="ID" href="#" id="@ID" onclick="Del('@ID')" value="@ID">刪除</a>
+                        </td>
+                    </tr>
+                    i += 1;
+                }
             }
-        }
-    </table>
+        </table>
+    </div>
 </div>
+<script>
+    function Del(ID) {
+        if (confirm("確定要刪除嗎?")) {
+            console.log(ID);
+            $.ajax({
+                type: "POST",
+                url: "/Customer/Delete",
+                data: {
+                    ID: ID
+                },
+                success(data) {
+                    var jsonData = JSON.parse(data);
+                    if (jsonData === "Fail") {
+                        alert("此客戶已有訂單資訊，無法刪除!");
+                        return;
+                    };
+                    if (jsonData === "NoData") {
+                        alert("未查詢到資料");
+                        return;
+                    }
+                    else {
+                        $("#tableDiv").empty();
+                        $("#tableDiv").append(
+                            `<table class='table' id="Cus_table"></table>`
+                        )
+                        $("#Cus_table").append(
+                            `<tbody>` +
+                            `<tr>` +
+                            `<th scope = "col" >編號</th >` +
+                            `<th scope = "col" >顧客ID</th >` +
+                            `<th scope = "col" >公司名稱</th >` +
+                            `<th scope = "col" >聯繫人</th >` +
+                            `<th scope = "col" >聯繫人職位</th >` +
+                            `<th scope = "col" >地址</th >` +
+                            `<th scope = "col" >電話</th >` +
+                            `<th scope = "col" >修改資訊</th >` +
+                            `</tr>`
+                        );
+
+                        jsonData.forEach((item,index) => {
+                            var address = item.City;
+                            address += " " + item.Address;
+                            $("#Cus_table").append(
+                                `<tr>` + 
+                                `<th scope="row">${index + 1}</th>` + 
+                                `<td>${item.CustomerID}</td>` +
+                                `<td>${item.CompanyName}</td>` +
+                                `<td>${item.ContactName}</td>` +
+                                `<td>${item.ContactTitle}</td>` +
+                                `<td>${address}</td>` +
+                                `<td>${item.Phone}</td>` + 
+                                `<td>` +
+                                `<a href="/Customer/Edit/${item.CustomerID}">修改</a> |` + 
+                                `<a name="${item.CustomerID}" href="#" id="${item.CustomerID}" onclick="Del('${item.CustomerID}')" value="${item.CustomerID}">刪除</a>` + 
+                                `</td>` + 
+                                `</tr>` +
+                                `</tbody>`
+                            );
+                        })
+                    };
+                },
+                error: function(){
+                    alert("後端未響應");
+                }
+            })
+        }
+    }
+</script>

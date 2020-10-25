@@ -139,6 +139,7 @@
     <Compile Include="Models\Customer.cs">
       <DependentUpon>dbNW.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerClass.cs" />
     <Compile Include="Models\CustomerDemographic.cs">
       <DependentUpon>dbNW.tt</DependentUpon>
     </Compile>
@@ -235,6 +236,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Customer\Create.cshtml" />
+    <Content Include="Views\Customer\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

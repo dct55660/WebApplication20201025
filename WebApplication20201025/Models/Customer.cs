@@ -11,7 +11,8 @@ namespace WebApplication20201025.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Customer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,7 +21,7 @@ namespace WebApplication20201025.Models
             this.Orders = new HashSet<Order>();
             this.CustomerDemographics = new HashSet<CustomerDemographic>();
         }
-    
+
         public string CustomerID { get; set; }
         public string CompanyName { get; set; }
         public string ContactName { get; set; }

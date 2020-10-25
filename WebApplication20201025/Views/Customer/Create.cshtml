@@ -94,3 +94,10 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script>
+    $(function () {
+        $("#CustomerID").prop("required", true);
+        $("#CompanyName").prop("required", true);
+    });
+</script>

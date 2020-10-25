@@ -28,7 +28,7 @@ namespace WebApplication20201025.Controllers
         [HttpPost]
         public ActionResult Create(Customer cus)
         {
-            if(cus != null)
+            if (cus != null && cus.CustomerID != null && cus.CompanyName != null)
             {
                 db.Customers.Add(cus);
                 db.SaveChanges();
